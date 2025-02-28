@@ -1,0 +1,7 @@
+# 忽略.vscode目录
+
+.vscode/
+
+# 忽略main.exe文件
+
+main.exe
