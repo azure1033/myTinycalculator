@@ -1,4 +1,6 @@
 #include "mstack.h"
+#include "symbols.h"
+
 #include <string>
 
 
@@ -23,13 +25,14 @@ inline void Calculator::InfixToPostfix(std::string str)
     m_stack.clear();
     postfixExpression.clear();
     for (char c : str) {
-        switch (c) {
-            case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0': 
+        auto s = charToSymbol(c);
+        switch (s) {
+            case OPERAND:
                 postfixExpression += c; continue;
-            case '(': 
+            case PAREN_OPEN: 
                 m_stack.push(c); 
                 continue;
-            case ')': 
+            case PAREN_CLOSE: 
                 while (!m_stack.isEmpty() && m_stack.top() != '(') {
                     postfixExpression += m_stack.top(); m_stack.pop();
                 }
@@ -37,14 +40,14 @@ inline void Calculator::InfixToPostfix(std::string str)
                     m_stack.pop(); // 弹出 '(' 但不输出
                 }
                 continue;
-            case '+': case '-':
+            case PLUS: case MINUS:
                 while (!m_stack.isEmpty() && m_stack.top() != '(' && 
                        (m_stack.top() == '+' || m_stack.top() == '-' || m_stack.top() == '*' || m_stack.top() == '/')) {
                     postfixExpression += m_stack.top(); m_stack.pop();
                 } 
                 m_stack.push(c); 
                 continue;
-            case '*': case '/':
+            case MULTIPLY: case DIVIDE:
                 while (!m_stack.isEmpty() && m_stack.top() != '(' && 
                        (m_stack.top() == '*' || m_stack.top() == '/')) {
                     postfixExpression += m_stack.top(); m_stack.pop();
